@@ -84,7 +84,7 @@ model=bigscience/bloom-560m
 num_shard=2
 volume=$PWD/data # share a volume with the Docker container to avoid downloading weights every run
 
-docker run --gpus all --shm-size 1g -p 8080:80 -v $volume:/data ghcr.io/huggingface/text-generation-inference:0.8 --model-id $model --num-shard $num_shard
+docker run --gpus all --shm-size 1g -p 8088:80 -v $volume:/data ghcr.io/huggingface/text-generation-inference:0.8 --model-id $model --num-shard $num_shard
 ```
 **Note:** To use GPUs, you need to install the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html). We also recommend using NVIDIA drivers with CUDA version 11.8 or higher.
 
@@ -96,14 +96,14 @@ text-generation-launcher --help
 You can then query the model using either the `/generate` or `/generate_stream` routes:
 
 ```shell
-curl 127.0.0.1:8080/generate \
+curl 127.0.0.1:8088/generate \
     -X POST \
     -d '{"inputs":"What is Deep Learning?","parameters":{"max_new_tokens":17}}' \
     -H 'Content-Type: application/json'
 ```
 
 ```shell
-curl 127.0.0.1:8080/generate_stream \
+curl 127.0.0.1:8088/generate_stream \
     -X POST \
     -d '{"inputs":"What is Deep Learning?","parameters":{"max_new_tokens":17}}' \
     -H 'Content-Type: application/json'
@@ -118,7 +118,7 @@ pip install text-generation
 ```python
 from text_generation import Client
 
-client = Client("http://127.0.0.1:8080")
+client = Client("http://127.0.0.1:8088")
 print(client.generate("What is Deep Learning?", max_new_tokens=17).generated_text)
 
 text = ""
